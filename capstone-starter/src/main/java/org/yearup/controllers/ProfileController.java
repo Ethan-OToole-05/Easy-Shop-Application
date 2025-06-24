@@ -36,8 +36,6 @@ public class ProfileController {
             // find database user by userId
             User user = userDao.getByUserName(userName);
             int userId = user.getId();
-
-            // use the shoppingcartDao to get all items in the cart and return the cart
             return profileDao.getByUserId(userId);
         } catch (Exception ex) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
@@ -62,4 +60,6 @@ public class ProfileController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
         }
     }
+
+
 }
