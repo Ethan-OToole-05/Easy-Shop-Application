@@ -20,7 +20,6 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
     @Override
     public ShoppingCart getAllProducts(int userId) {
         ShoppingCart shoppingCart = new ShoppingCart();
-        ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
         String sql = "SELECT * FROM products AS p JOIN shopping_cart AS sc ON p.product_id = sc.product_id WHERE sc.user_id = ? ";
         try (Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -29,7 +28,9 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
             ResultSet row = statement.executeQuery();
 
             while (row.next()) {
+                ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
                 shoppingCartItem.setProduct(MySqlProductDao.mapRow(row));
+                shoppingCartItem.setQuantity(row.getInt("quantity"));
                 shoppingCart.add(shoppingCartItem);
             }
         } catch (SQLException e) {
@@ -41,7 +42,7 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
     @Override
     public ShoppingCart addItemToCart(int userId, int productId) {
         ShoppingCart shoppingCart = new ShoppingCart();
-        ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+//        ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
         int currentQuantity = 0;
         boolean matchingItem = false;
 
@@ -65,7 +66,7 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
                 String updateSql = "UPDATE shopping_cart SET quantity = ? WHERE user_id = ? AND product_id = ?;";
                 try (PreparedStatement updateStatement = connection.prepareStatement(updateSql)) {
                     // Increments quantity by 1 with the update statement.
-                    int newQuantity = currentQuantity++;
+                    int newQuantity = currentQuantity + 1;
                     updateStatement.setInt(1, newQuantity);
                     updateStatement.setInt(2, userId);
                     updateStatement.setInt(3, productId);

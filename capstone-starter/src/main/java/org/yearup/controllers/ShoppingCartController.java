@@ -57,9 +57,9 @@ public class ShoppingCartController
     // add a POST method to add a product to the cart - the url should be
     // https://localhost:8080/cart/products/15 (15 is the productId to be added
 
-    @PostMapping("")
+    @PostMapping("/products/{productId}")
     @PreAuthorize("permitAll()")
-    public ShoppingCart addItemToCart(Principal principal) {
+    public ShoppingCart addItemToCart(Principal principal, @PathVariable int productId) {
 
         //TODO:ADD ITEM FROM SHOPPING CART DAO NEEDS TESTING
 
@@ -71,7 +71,7 @@ public class ShoppingCartController
             User user = userDao.getByUserName(userName);
             int userId = user.getId();
 
-            return shoppingCartDao.getAllProducts(userId);
+            return shoppingCartDao.addItemToCart(userId, productId);
         }
         catch(Exception e)
         {
