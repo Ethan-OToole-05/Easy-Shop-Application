@@ -9,6 +9,7 @@ import org.yearup.data.ProductDao;
 import org.yearup.data.ShoppingCartDao;
 import org.yearup.data.UserDao;
 import org.yearup.models.ShoppingCart;
+import org.yearup.models.ShoppingCartItem;
 import org.yearup.models.User;
 
 import java.security.Principal;
@@ -83,8 +84,45 @@ public class ShoppingCartController
     // https://localhost:8080/cart/products/15 (15 is the productId to be updated)
     // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated
 
+    @PutMapping("/products/{productId}")
+    @PreAuthorize("permitAll()")
+    //Change return to shoppingcart? Had void in the beginning                              HAD TO CHANGE REQUEST BODY TO BE AN ITEM FOR QUANTITY
+    public ShoppingCart updateItemFromCart(Principal principal, @PathVariable int productId, @RequestBody ShoppingCartItem shoppingCartItem) {
+        try
+        {
+            // get the currently logged in username
+            String userName = principal.getName();
+            // find database user by userId
+            User user = userDao.getByUserName(userName);
+            int userId = user.getId();
+
+           return shoppingCartDao.setQuantityOfItem(userId, productId, shoppingCartItem.getQuantity());
+        }
+        catch(Exception e)
+        {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+        }
+    }
 
     // add a DELETE method to clear all products from the current users cart
     // https://localhost:8080/cart
 
+    @DeleteMapping()
+    @PreAuthorize("permitAll()")
+    public void removeItemsFromCart(Principal principal) {
+        try
+        {
+            // get the currently logged in username
+            String userName = principal.getName();
+            // find database user by userId
+            User user = userDao.getByUserName(userName);
+            int userId = user.getId();
+
+            shoppingCartDao.removeItemsFromCart(userId);
+        }
+        catch(Exception e)
+        {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+        }
+    }
 }
