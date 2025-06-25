@@ -62,8 +62,6 @@ public class ShoppingCartController
     @PreAuthorize("permitAll()")
     public ShoppingCart addItemToCart(Principal principal, @PathVariable int productId) {
 
-        //TODO:ADD ITEM FROM SHOPPING CART DAO NEEDS TESTING
-
         try
         {
             // get the currently logged in username

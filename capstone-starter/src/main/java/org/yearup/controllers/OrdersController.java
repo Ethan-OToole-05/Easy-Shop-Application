@@ -10,8 +10,6 @@ import org.yearup.data.ProfileDao;
 import org.yearup.data.ShoppingCartDao;
 import org.yearup.data.UserDao;
 import org.yearup.models.Order;
-import org.yearup.models.Product;
-import org.yearup.models.ShoppingCart;
 import org.yearup.models.User;
 
 import java.security.Principal;
@@ -21,7 +19,7 @@ import java.security.Principal;
 @CrossOrigin
 public class OrdersController {
     private OrdersDao ordersDao;
-    private ShoppingCartDao shoppingCart;
+    private ShoppingCartDao shoppingCartDao;
     private ProfileDao profileDao;
     private UserDao userDao;
 
@@ -29,14 +27,14 @@ public class OrdersController {
     @Autowired
     public OrdersController(OrdersDao ordersDao, ShoppingCartDao shoppingCartDao, ProfileDao profileDao, UserDao userDao) {
         this.ordersDao = ordersDao;
-        this.shoppingCart = shoppingCartDao;
+        this.shoppingCartDao = shoppingCartDao;
         this.profileDao = profileDao;
         this.userDao = userDao;
     }
 
     @PostMapping()
     @PreAuthorize("permitAll()")
-    public Order makeOrder(Principal principal, ShoppingCart shoppingCart)
+    public Order makeOrder(Principal principal)
     {
         try {
             // get the currently logged in username
@@ -44,7 +42,7 @@ public class OrdersController {
             // find database user by userId
             User user = userDao.getByUserName(userName);
             int userId = user.getId();
-            return ordersDao.makeOrder(shoppingCart, userId);
+            return ordersDao.makeOrder(shoppingCartDao.getAllProducts(userId), profileDao.getByUserId(userId));
         } catch (Exception ex) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
         }

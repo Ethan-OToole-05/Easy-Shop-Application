@@ -1,7 +1,7 @@
 package org.yearup.data.mysql;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.yearup.models.Product;
 import org.yearup.models.Profile;
 import org.yearup.data.ProfileDao;
 
@@ -11,6 +11,7 @@ import java.sql.*;
 @Component
 public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
 {
+    @Autowired
     public MySqlProfileDao(DataSource dataSource)
     {
         super(dataSource);
@@ -24,18 +25,18 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
 
         try(Connection connection = getConnection())
         {
-            PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, profile.getUserId());
-            ps.setString(2, profile.getFirstName());
-            ps.setString(3, profile.getLastName());
-            ps.setString(4, profile.getPhone());
-            ps.setString(5, profile.getEmail());
-            ps.setString(6, profile.getAddress());
-            ps.setString(7, profile.getCity());
-            ps.setString(8, profile.getState());
-            ps.setString(9, profile.getZip());
+            PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            statement.setInt(1, profile.getUserId());
+            statement.setString(2, profile.getFirstName());
+            statement.setString(3, profile.getLastName());
+            statement.setString(4, profile.getPhone());
+            statement.setString(5, profile.getEmail());
+            statement.setString(6, profile.getAddress());
+            statement.setString(7, profile.getCity());
+            statement.setString(8, profile.getState());
+            statement.setString(9, profile.getZip());
 
-            ps.executeUpdate();
+            statement.executeUpdate();
 
             return profile;
         }
