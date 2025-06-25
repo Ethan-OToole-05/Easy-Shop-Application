@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.yearup.data.ProfileDao;
 import org.yearup.data.UserDao;
-import org.yearup.models.Product;
 import org.yearup.models.Profile;
 import org.yearup.models.User;
 
@@ -38,13 +37,13 @@ public class ProfileController {
             int userId = user.getId();
             return profileDao.getByUserId(userId);
         } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred getting profile.");
         }
     }
 
     @PutMapping()
     @PreAuthorize("permitAll()")
-    public void updateProduct(Principal principal, @RequestBody Profile profile)
+    public void updateProfile(Principal principal, @RequestBody Profile profile)
     {
         try
         {
@@ -57,7 +56,7 @@ public class ProfileController {
         }
         catch(Exception ex)
         {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred while updating profile.");
         }
     }
 

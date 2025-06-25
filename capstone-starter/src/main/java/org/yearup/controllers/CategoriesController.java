@@ -1,8 +1,11 @@
 package org.yearup.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.yearup.data.CategoryDao;
 import org.yearup.data.ProductDao;
 import org.yearup.models.Category;
@@ -35,7 +38,11 @@ public class CategoriesController {
     @PreAuthorize("permitAll()")
     public List<Category> getAll() {
         // find and return all categories
-        return categoryDao.getAllCategories();
+        try {
+            return categoryDao.getAllCategories();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred during getting all categories..");
+        }
     }
 
     // add the appropriate annotation for a get action
@@ -43,7 +50,14 @@ public class CategoriesController {
     @PreAuthorize("permitAll()")
     public Category getById(@PathVariable int id) {
         // get the category by id
-        return categoryDao.getById(id);
+        try {
+            if(id == 0 || id < 0) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error category could not be found");
+            }
+            return categoryDao.getById(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred during getting a category.");
+        }
     }
 
     // the url to return all products in category 1 would look like this
@@ -52,7 +66,14 @@ public class CategoriesController {
     @PreAuthorize("permitAll()")
     public List<Product> getProductsById(@PathVariable int categoryId) {
         // get a list of product by categoryId
-        return categoryDao.getProductsByCategoryId(categoryId);
+        try {
+            if(categoryId == 0 || categoryId < 0) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error products from category could not be found");
+            }
+            return categoryDao.getProductsByCategoryId(categoryId);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred during creating a category.");
+        }
     }
 
     // add annotation to call this method for a POST action
@@ -60,8 +81,14 @@ public class CategoriesController {
     @PostMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Category addCategory(@RequestBody Category category) {
-        // insert the category
-        return categoryDao.create(category);
+        try {
+            if(category == null || category.getCategoryId() < 0) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: category could not be made");
+            }
+            return categoryDao.create(category);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: creating a category");
+        }
     }
 
     // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
@@ -70,7 +97,14 @@ public class CategoriesController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void updateCategory(@PathVariable int id, @RequestBody Category category) {
         // update the category by id
-        categoryDao.update(id, category);
+        try {
+            if(category == null || category.getCategoryId() < 0) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred updating category");
+            }
+            categoryDao.update(id, category);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred during updating category.");
+        }
     }
 
 
@@ -79,8 +113,13 @@ public class CategoriesController {
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteCategory(@PathVariable int id) {
-        // delete the category by id
-        categoryDao.delete(id);
-
+        try {
+            if(id == 0 || id < 0) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error deleting category was not found.");
+            }
+            categoryDao.delete(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred during deleting category.");
+        }
     }
 }
