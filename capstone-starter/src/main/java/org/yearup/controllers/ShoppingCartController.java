@@ -33,8 +33,9 @@ public class ShoppingCartController
         this.productDao = productDao;
     }
 
-    @GetMapping("")
+    @GetMapping()
     @PreAuthorize("permitAll()")
+    @ResponseStatus(HttpStatus.OK)
     // each method in this controller requires a Principal object as a parameter
     public ShoppingCart getCart(Principal principal)
     {
@@ -60,6 +61,7 @@ public class ShoppingCartController
 
     @PostMapping("/products/{productId}")
     @PreAuthorize("permitAll()")
+    @ResponseStatus(HttpStatus.CREATED)
     public ShoppingCart addItemToCart(Principal principal, @PathVariable int productId) {
 
         try
@@ -84,8 +86,10 @@ public class ShoppingCartController
 
     @PutMapping("/products/{productId}")
     @PreAuthorize("permitAll()")
+    @ResponseStatus(HttpStatus.OK)
     //Change return to shoppingcart? Had void in the beginning                              HAD TO CHANGE REQUEST BODY TO BE AN ITEM FOR QUANTITY
     public ShoppingCart updateItemFromCart(Principal principal, @PathVariable int productId, @RequestBody ShoppingCartItem shoppingCartItem) {
+        ShoppingCart shoppingCart = new ShoppingCart();
         try
         {
             // get the currently logged in username
@@ -107,7 +111,8 @@ public class ShoppingCartController
 
     @DeleteMapping()
     @PreAuthorize("permitAll()")
-    public void removeItemsFromCart(Principal principal) {
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ShoppingCart removeItemsFromCart(Principal principal) {
         try
         {
             // get the currently logged in username
@@ -116,7 +121,7 @@ public class ShoppingCartController
             User user = userDao.getByUserName(userName);
             int userId = user.getId();
 
-            shoppingCartDao.removeItemsFromCart(userId);
+            return shoppingCartDao.removeItemsFromCart(userId);
         }
         catch(Exception e)
         {

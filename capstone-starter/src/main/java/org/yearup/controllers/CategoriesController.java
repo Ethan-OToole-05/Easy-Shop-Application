@@ -51,7 +51,7 @@ public class CategoriesController {
     public Category getById(@PathVariable int id) {
         // get the category by id
         try {
-            if(id == 0 || id < 0) {
+            if(categoryDao.getById(id) == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error category could not be found");
             }
             return categoryDao.getById(id);
@@ -67,7 +67,7 @@ public class CategoriesController {
     public List<Product> getProductsById(@PathVariable int categoryId) {
         // get a list of product by categoryId
         try {
-            if(categoryId == 0 || categoryId < 0) {
+            if(categoryDao.getById(categoryId) == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error products from category could not be found");
             }
             return categoryDao.getProductsByCategoryId(categoryId);
@@ -80,9 +80,10 @@ public class CategoriesController {
     // add annotation to ensure that only an ADMIN can call this function
     @PostMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
     public Category addCategory(@RequestBody Category category) {
         try {
-            if(category == null || category.getCategoryId() < 0) {
+            if(categoryDao.create(category) == null) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: category could not be made");
             }
             return categoryDao.create(category);
@@ -112,6 +113,7 @@ public class CategoriesController {
     // add annotation to ensure that only an ADMIN can call this function
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable int id) {
         try {
             if(id == 0 || id < 0) {

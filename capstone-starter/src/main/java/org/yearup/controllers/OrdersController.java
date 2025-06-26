@@ -34,6 +34,7 @@ public class OrdersController {
 
     @PostMapping()
     @PreAuthorize("permitAll()")
+    @ResponseStatus(HttpStatus.CREATED)
     public Order makeOrder(Principal principal)
     {
         try {

@@ -50,8 +50,9 @@ public class ProductsController
         {
             var product = productDao.getById(id);
 
-            if(product == null)
+            if(product == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
 
             return product;
         }
@@ -63,6 +64,7 @@ public class ProductsController
 
     @PostMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
     public Product addProduct(@RequestBody Product product)
     {
         try
@@ -92,6 +94,7 @@ public class ProductsController
 
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProduct(@PathVariable int id)
     {
         try
