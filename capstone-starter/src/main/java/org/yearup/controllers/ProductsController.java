@@ -24,6 +24,7 @@ public class ProductsController
         this.productDao = productDao;
     }
 
+    //Large selector to see all the list of products based on the category, price, and color.
     @GetMapping("")
     @PreAuthorize("permitAll()")
     public List<Product> search(@RequestParam(name="cat", required = false) Integer categoryId,
@@ -42,6 +43,8 @@ public class ProductsController
         }
     }
 
+
+    //GET method that is used to get a single product by the id.
     @GetMapping("{id}")
     @PreAuthorize("permitAll()")
     public Product getById(@PathVariable int id )
@@ -62,6 +65,7 @@ public class ProductsController
         }
     }
 
+    //POST method that is used to add new products to the list.
     @PostMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
@@ -77,6 +81,7 @@ public class ProductsController
         }
     }
 
+    //PUT method that is used to update the product's information.
     @PutMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void updateProduct(@PathVariable int id, @RequestBody Product product)
@@ -92,6 +97,7 @@ public class ProductsController
         }
     }
 
+    //DELETE method that is used to remove a product from the list of products.
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)

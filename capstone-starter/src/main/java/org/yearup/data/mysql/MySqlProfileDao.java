@@ -17,6 +17,8 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
         super(dataSource);
     }
 
+
+    //Used to create a new profile.
     @Override
     public Profile create(Profile profile)
     {
@@ -46,6 +48,7 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
         }
     }
 
+    //Used to get a profile by the user id that is passed in.
     @Override
     public Profile getByUserId(int userId) {
         String sql = "SELECT * FROM profiles WHERE user_id = ?";
@@ -68,6 +71,8 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
         return null;
     }
 
+
+    //Used to update the entire profile by the userId and new profile info getting passed in.
     @Override
     public Profile updateProfile(int userId, Profile profile) {
         Profile profile1 = new Profile();
@@ -104,6 +109,8 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
         return profile1;
     }
 
+
+    //Helper method that is used to map out what makes up a profile.
     protected static Profile mapRow(ResultSet row) throws SQLException
     {
         int userId = row.getInt("user_id");

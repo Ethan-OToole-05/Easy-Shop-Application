@@ -21,6 +21,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
         super(dataSource);
     }
 
+    //Getting all the categories that is available in the db table to select.
     @Override
     public List<Category> getAllCategories() {
         List<Category> categories = new ArrayList<>();
@@ -38,6 +39,8 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
         }
         return categories;
     }
+
+    //Getting the category info by just the category id.
 
     @Override
     public Category getById(int categoryId) {
@@ -58,6 +61,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
         return category;
     }
 
+    //Getting products by a category id.
     public List<Product> getProductsByCategoryId(int categoryId) {
         List<Product> products = new ArrayList<>();
         String sql = "SELECT * FROM categories AS c JOIN products AS p ON c.category_Id = p.category_id WHERE c.category_Id = ?";
@@ -76,6 +80,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
         return products;
     }
 
+    //Creating an entire category to be used based on what is passed in.
     @Override
     public Category create(Category category) {
         // create a new category
@@ -107,6 +112,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
         return category;
     }
 
+    //Update a category's name and description of the category by the id.
     @Override
     public void update(int categoryId, Category category) {
         String sql = "UPDATE categories" +
@@ -139,6 +145,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
         }
     }
 
+    //Helper method that is used to map out what makes a category.
     private Category mapRow(ResultSet row) throws SQLException {
         int categoryId = row.getInt("category_id");
         String name = row.getString("name");

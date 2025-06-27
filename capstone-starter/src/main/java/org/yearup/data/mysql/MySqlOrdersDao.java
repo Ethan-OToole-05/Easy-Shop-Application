@@ -19,6 +19,7 @@ public class MySqlOrdersDao extends MySqlDaoBase implements OrdersDao {
     }
 
 
+    //Used to make a new order based on the profile of the user and the user's shopping cart.
     @Override
     public Order makeOrder(ShoppingCart shoppingCart, Profile profile) {
         int orderId = 0;
@@ -36,6 +37,7 @@ public class MySqlOrdersDao extends MySqlDaoBase implements OrdersDao {
 
         Timestamp timestamp = Timestamp.valueOf(now);
 
+        //Insert into orders first to make the transaction.
         String sql = "INSERT INTO orders(user_id, date, address, city, state, zip, shipping_amount) " +
                 " VALUES (?, ?, ?, ?, ?, ?, ?);";
 
@@ -59,6 +61,7 @@ public class MySqlOrdersDao extends MySqlDaoBase implements OrdersDao {
                     orderId = generatedKeys.getInt(1);
                 }
             }
+            //We will take each item that was inside the cart into the order_line_items db table.
             for (ShoppingCartItem item : shoppingCart.getItems().values()) {
                 String insertItemSql = "INSERT INTO order_line_items(order_id, product_id, sales_price, quantity, discount) " +
                         " VALUES (?, ?, ?, ?, ?);";
@@ -90,6 +93,7 @@ public class MySqlOrdersDao extends MySqlDaoBase implements OrdersDao {
         }
     }
 
+    //Used to grab an order that a person made by the order_id.
     @Override
     public Order getOrder(int order_id) {
         String sql = "SELECT * FROM orders WHERE order_id = ?";
@@ -108,6 +112,7 @@ public class MySqlOrdersDao extends MySqlDaoBase implements OrdersDao {
         return null;
     }
 
+    //Helper method that is used to map out what makes an order.
     protected static Order mapRow(ResultSet row) throws SQLException {
         int order_id = row.getInt("order_id");
         int user_id = row.getInt("user_id");

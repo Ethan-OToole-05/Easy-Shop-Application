@@ -32,6 +32,7 @@ public class OrdersController {
         this.userDao = userDao;
     }
 
+    //POST method to make sure the user is signed in to make an order from it's shopping cart.
     @PostMapping()
     @PreAuthorize("isAuthenticated()")
     @ResponseStatus(HttpStatus.CREATED)

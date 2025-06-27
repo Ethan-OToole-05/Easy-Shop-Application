@@ -21,6 +21,7 @@ public class MySqlUserDao extends MySqlDaoBase implements UserDao
     }
 
 
+    //Used to make a new user based on the new username, password, and role.
     @Override
     public User create(User newUser)
     {

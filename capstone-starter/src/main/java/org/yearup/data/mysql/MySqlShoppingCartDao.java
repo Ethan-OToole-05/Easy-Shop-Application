@@ -19,6 +19,7 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
         super(dataSource);
     }
 
+    //Used to get all the products that is inside a user's cart.
     @Override
     public ShoppingCart getAllProducts(int userId) {
         ShoppingCart shoppingCart = new ShoppingCart();
@@ -41,6 +42,7 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
         return shoppingCart;
     }
 
+    //Used to add an item into the user's cart.
     @Override
     public ShoppingCart addItemToCart(int userId, int productId) {
         ShoppingCart shoppingCart = new ShoppingCart();
@@ -107,6 +109,7 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
         }
     }
 
+    //Sets the quantity of an item that is the same product into a user's cart.
     @Override
     public ShoppingCart setQuantityOfItem(int userId, int productId, int amount) {
         ShoppingCart shoppingCart = new ShoppingCart();
@@ -164,7 +167,7 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
         }
     }
 
-
+    //Used to remove all the items from a user's cart.
     @Override
     public ShoppingCart removeItemsFromCart(int userId) {
         ShoppingCart shoppingCart = new ShoppingCart();

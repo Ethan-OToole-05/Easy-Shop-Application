@@ -26,6 +26,7 @@ public class ProfileController {
         this.userDao = userDao;
     }
 
+    //GET method that is used to get a profile by the user's id.
     @GetMapping()
     @PreAuthorize("isAuthenticated()")
     public Profile getProfileById(Principal principal) {
@@ -41,6 +42,7 @@ public class ProfileController {
         }
     }
 
+    //PUT method that is used to update the user's profile.
     @PutMapping()
     @PreAuthorize("isAuthenticated()")
     public void updateProfile(Principal principal, @RequestBody Profile profile)
