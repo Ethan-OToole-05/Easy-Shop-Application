@@ -173,6 +173,26 @@ class ShoppingCartService {
              })
     }
 
+//    placeOrder(){
+//    const url = `${config.baseUrl}/orders`;
+//
+//           axios.post(url, {})// ,{headers})
+//                       .then(response => {
+//                           this.setCart(response.data)
+//
+//                           this.updateCartDisplay()
+//
+//                       })
+//                       .catch(error => {
+//
+//                           const data = {
+//                               error: "Add to cart failed."
+//                           };
+//
+//                           templateBuilder.append("error", data, "errors")
+//                       })
+//    }
+
     updateCartDisplay()
     {
         try {

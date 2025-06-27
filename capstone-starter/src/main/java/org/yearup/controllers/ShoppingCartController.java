@@ -34,7 +34,7 @@ public class ShoppingCartController
     }
 
     @GetMapping()
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("isAuthenticated()")
     @ResponseStatus(HttpStatus.OK)
     // each method in this controller requires a Principal object as a parameter
     public ShoppingCart getCart(Principal principal)
@@ -60,7 +60,7 @@ public class ShoppingCartController
     // https://localhost:8080/cart/products/15 (15 is the productId to be added
 
     @PostMapping("/products/{productId}")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("isAuthenticated()")
     @ResponseStatus(HttpStatus.CREATED)
     public ShoppingCart addItemToCart(Principal principal, @PathVariable int productId) {
 
@@ -85,7 +85,7 @@ public class ShoppingCartController
     // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated
 
     @PutMapping("/products/{productId}")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("isAuthenticated()")
     @ResponseStatus(HttpStatus.OK)
     //Change return to shoppingcart? Had void in the beginning                              HAD TO CHANGE REQUEST BODY TO BE AN ITEM FOR QUANTITY
     public ShoppingCart updateItemFromCart(Principal principal, @PathVariable int productId, @RequestBody ShoppingCartItem shoppingCartItem) {
@@ -110,8 +110,7 @@ public class ShoppingCartController
     // https://localhost:8080/cart
 
     @DeleteMapping()
-    @PreAuthorize("permitAll()")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("isAuthenticated()")
     public ShoppingCart removeItemsFromCart(Principal principal) {
         try
         {

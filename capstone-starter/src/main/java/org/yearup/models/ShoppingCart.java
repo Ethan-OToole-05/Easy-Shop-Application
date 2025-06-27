@@ -28,6 +28,10 @@ public class ShoppingCart
         items.put(item.getProductId(), item);
     }
 
+    public void clear(){
+        this.items.clear();
+    }
+
     public ShoppingCartItem get(int productId)
     {
         return items.get(productId);

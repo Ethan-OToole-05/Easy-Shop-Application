@@ -33,7 +33,7 @@ public class OrdersController {
     }
 
     @PostMapping()
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("isAuthenticated()")
     @ResponseStatus(HttpStatus.CREATED)
     public Order makeOrder(Principal principal)
     {

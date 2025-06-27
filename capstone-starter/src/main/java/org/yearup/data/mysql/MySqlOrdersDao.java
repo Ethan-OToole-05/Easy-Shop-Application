@@ -15,7 +15,6 @@ public class MySqlOrdersDao extends MySqlDaoBase implements OrdersDao {
 
     @Autowired
     public MySqlOrdersDao(DataSource dataSource) {
-        //wire up the profileDAO? (need it for address, city, etc.)
         super(dataSource);
     }
 
@@ -24,10 +23,6 @@ public class MySqlOrdersDao extends MySqlDaoBase implements OrdersDao {
     public Order makeOrder(ShoppingCart shoppingCart, Profile profile) {
         int orderId = 0;
         Order order = new Order();
-
-        //Profile DAO to grab a profile? Inside the DAO?
-        //OR pass in the profile from a DAO call in the controller? so it will be:
-        //(ShoppingCart shoppingCart, int user_id, Profile profile) for params.
 
         BigDecimal total = new BigDecimal("0.00");
         int itemCounter = 0;
@@ -86,6 +81,9 @@ public class MySqlOrdersDao extends MySqlDaoBase implements OrdersDao {
                     }
                 }
             }
+
+            shoppingCart.clear();
+
             return getOrder(orderId);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -93,7 +91,7 @@ public class MySqlOrdersDao extends MySqlDaoBase implements OrdersDao {
     }
 
     @Override
-    public Order getOrder(int order_id) { //TODO:iNCLUDE USER ID AS WELL.
+    public Order getOrder(int order_id) {
         String sql = "SELECT * FROM orders WHERE order_id = ?";
         try (Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -113,7 +111,7 @@ public class MySqlOrdersDao extends MySqlDaoBase implements OrdersDao {
     protected static Order mapRow(ResultSet row) throws SQLException {
         int order_id = row.getInt("order_id");
         int user_id = row.getInt("user_id");
-        Timestamp date = row.getTimestamp("date"); //Problem later?
+        Timestamp date = row.getTimestamp("date");
         String address = row.getString("address");
         String city = row.getString("city");
         String state = row.getString("state");

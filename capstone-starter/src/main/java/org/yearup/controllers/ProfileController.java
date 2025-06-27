@@ -27,7 +27,7 @@ public class ProfileController {
     }
 
     @GetMapping()
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("isAuthenticated()")
     public Profile getProfileById(Principal principal) {
         try {
             // get the currently logged in username
@@ -42,7 +42,7 @@ public class ProfileController {
     }
 
     @PutMapping()
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("isAuthenticated()")
     public void updateProfile(Principal principal, @RequestBody Profile profile)
     {
         try
